@@ -24,7 +24,7 @@ public class ArticleController {
     ArticleService articleService;
 
     @ResponseBody
-    @RequestMapping(value="/emp/{ids}",method=RequestMethod.DELETE)
+    @RequestMapping(value="/art/{ids}",method=RequestMethod.DELETE)
     public Msg deleteArticle(@PathVariable("ids")String ids){
         //批量删除
         if(ids.contains("-")){
@@ -42,7 +42,7 @@ public class ArticleController {
     }
 
     @ResponseBody
-    @RequestMapping(value="/emp/{articleId}",method=RequestMethod.PUT)
+    @RequestMapping(value="/art/{articleId}",method=RequestMethod.PUT)
     public Msg saveArticle(Article article, HttpServletRequest request){
         System.out.println("请求体中的值："+request.getParameter("title"));
         System.out.println("将要更新的文章数据："+article);
@@ -55,7 +55,7 @@ public class ArticleController {
      * @param id
      * @return
      */
-    @RequestMapping(value="/emp/{id}",method=RequestMethod.GET)
+    @RequestMapping(value="/art/{id}",method=RequestMethod.GET)
     @ResponseBody
     public Msg getArticle(@PathVariable("id")String id){
         Article article = articleService.getArticle(id);
@@ -66,7 +66,7 @@ public class ArticleController {
      * 文章信息保存
      * @return
      */
-    @RequestMapping(value="/emp",method=RequestMethod.POST)
+    @RequestMapping(value="/art",method=RequestMethod.POST)
     @ResponseBody
     public Msg saveAuthor(@Valid Article article, BindingResult result){
             articleService.saveArticle(article);
@@ -77,7 +77,7 @@ public class ArticleController {
      * 查询文章数据（分页查询）
      * @return
      */
-    @RequestMapping("/emps")
+    @RequestMapping("/arts")
     @ResponseBody
     public Msg getArtWithJson(@RequestParam(value = "pn", defaultValue = "1") Integer pn) {
         // 引入PageHelper分页插件

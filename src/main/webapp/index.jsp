@@ -131,7 +131,7 @@
 	<!-- 显示表格数据 -->
 	<div class="row">
 		<div class="col-md-12">
-			<table class="table table-hover" id="emps_table">
+			<table class="table table-hover" id="arts_table">
 				<thead>
 				<tr>
 					<th>
@@ -172,7 +172,7 @@
 
     function to_page(pn){
         $.ajax({
-            url:"${APP_PATH}/emps",
+            url:"${APP_PATH}/arts",
             data:"pn="+pn,
             type:"GET",
             success:function(result){
@@ -188,7 +188,7 @@
 
     function build_arts_table(result){
         //清空table表格
-        $("#emps_table tbody").empty();
+        $("#arts_table tbody").empty();
         var arts = result.extend.pageInfo.list;
         $.each(arts,function(index,item){
             var checkBoxTd = $("<td><input type='checkbox' class='check_item'/></td>");
@@ -215,7 +215,7 @@
                 .append(content)
                 .append(publicationTime)
                 .append(btnTd)
-                .appendTo("#emps_table tbody");
+                .appendTo("#arts_table tbody");
         });
     }
     //解析显示分页信息
@@ -312,7 +312,7 @@
 
         //发送ajax请求保存文章
         $.ajax({
-            url:"${APP_PATH}/emp",
+            url:"${APP_PATH}/art",
             type:"POST",
             data:$("#artAddModal form").serialize(),
             success:function(result){
@@ -344,7 +344,7 @@
     });
     function getEmp(id){
         $.ajax({
-            url:"${APP_PATH}/emp/"+id,
+            url:"${APP_PATH}/art/"+id,
             type:"GET",
             success:function(result){
                 var artData = result.extend.emp;
@@ -360,7 +360,7 @@
     $("#art_update_btn").click(function(){
         //发送ajax请求保存更新的文章数据
         $.ajax({
-            url:"${APP_PATH}/emp/"+$(this).attr("edit-id"),
+            url:"${APP_PATH}/art/"+$(this).attr("edit-id"),
             type:"PUT",
             data:$("#artUpdateModal form").serialize(),
             success:function(result){
@@ -381,7 +381,7 @@
         if(confirm("确认删除【"+author+"】吗？")){
             //确认，发送ajax请求删除即可
             $.ajax({
-                url:"${APP_PATH}/emp/"+articleId,
+                url:"${APP_PATH}/art/"+articleId,
                 type:"DELETE",
                 success:function(result){
                     alert(result.msg);
@@ -421,7 +421,7 @@
         if(confirm("确认删除【"+authors+"】吗？")){
             //发送ajax请求删除
             $.ajax({
-                url:"${APP_PATH}/emp/"+del_idstr,
+                url:"${APP_PATH}/art/"+del_idstr,
                 type:"DELETE",
                 success:function(result){
                     alert(result.msg);

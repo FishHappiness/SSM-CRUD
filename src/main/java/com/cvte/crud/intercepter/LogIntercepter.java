@@ -23,11 +23,11 @@ public class LogIntercepter implements HandlerInterceptor{
         if (handler instanceof HandlerMethod) {
             Thread.sleep(500);
             httpServletRequest.setAttribute("tranceId", UUID.randomUUID().toString());
-            StringBuilder sb = new StringBuilder(1000);
-            sb.append("\n"+"-----------------------").append(new Date()).append("-------------------------------------\n");
+            StringBuilder builder = new StringBuilder(1000);
+            builder.append("\n"+"-----------------------").append(new Date()).append("-------------------------------------\n");
             HandlerMethod h = (HandlerMethod) handler;
-            sb.append("Controller: ").append(h.getBean().getClass().getName()).append("\n");
-            sb.append("Method    : ").append(h.getMethod().getName()).append("\n");
+            builder.append("Controller: ").append(h.getBean().getClass().getName()).append("\n");
+            builder.append("Method    : ").append(h.getMethod().getName()).append("\n");
             String url = httpServletRequest.getRequestURI();
             String param = getParamString(httpServletRequest.getParameterMap());
             String[] params = null;
@@ -35,9 +35,9 @@ public class LogIntercepter implements HandlerInterceptor{
                  param = url.substring(url.lastIndexOf("/") + 1);
                  params = param.split("-");
             }
-            sb.append("Params    : ").append((params == null? param:Arrays.asList(params))+"\n");
-            sb.append("URI       : ").append(url).append("\n");
-            System.out.print(sb.toString());
+            builder.append("Params    : ").append("pn="+(params == null? param:Arrays.asList(params))+"\n");
+            builder.append("URI       : ").append(url).append("\n");
+            System.out.print(builder.toString());
         }
         return true;
     }
@@ -49,34 +49,34 @@ public class LogIntercepter implements HandlerInterceptor{
 
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) throws Exception {
 
-        StringBuilder sb = new StringBuilder(1000);
+        StringBuilder builder = new StringBuilder(1000);
         String tranceId = (String) httpServletRequest.getAttribute("tranceId");
         if(tranceId==null || "".equals(tranceId)){
             httpServletRequest.setAttribute("tranceId",UUID.randomUUID().toString());
         }
-        sb.append("tranceId : "+tranceId+"\n");
+        builder.append("tranceId : "+tranceId+"\n");
         long startTime = (Long) httpServletRequest.getAttribute("startTime");
         long endTime = System.currentTimeMillis();
         long executeTime = endTime - startTime;
         if(handler instanceof HandlerMethod){
-            sb.append("CostTime  : ").append(executeTime).append("ms").append("\n");
-            System.out.print(sb.toString());
+            builder.append("CostTime  : ").append(executeTime).append("ms").append("\n");
+            System.out.print(builder.toString());
         }
         if(executeTime > 500){
             LOGGER.warn("Time_OUT 500ms");
         }
     }
     private String getParamString(Map<String, String[]> map) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         for(Map.Entry<String,String[]> e:map.entrySet()){
-            sb.append(e.getKey()).append("=");
+            builder.append(e.getKey()).append("=");
             String[] value = e.getValue();
             if(value != null && value.length == 1){
-                sb.append(value[0]).append("\t");
+                builder.append(value[0]).append("\t");
             }else{
-                sb.append(Arrays.toString(value)).append("\t");
+                builder.append(Arrays.toString(value)).append("\t");
             }
         }
-        return sb.toString();
+        return builder.toString();
     }
 }

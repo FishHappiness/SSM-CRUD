@@ -353,7 +353,7 @@
                 $("#title_update_input").text(artData.title);
                 $("#content_update_input").text(artData.content);
                 $("#pubTime_update_input").text(artData.pubTime);
-                alert(artData.content);
+               // alert(artData.content);
             }
         });
     }

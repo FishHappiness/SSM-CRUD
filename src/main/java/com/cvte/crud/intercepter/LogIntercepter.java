@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public class LogIntercepter implements HandlerInterceptor{
     private static Logger LOGGER = LoggerFactory.getLogger(LogIntercepter.class);
@@ -19,7 +20,9 @@ public class LogIntercepter implements HandlerInterceptor{
         long startTime = System.currentTimeMillis();
         httpServletRequest.setAttribute("startTime", startTime);
         
-        if (handler instanceof HandlerMethod) {Thread.sleep(500);
+        if (handler instanceof HandlerMethod) {
+            Thread.sleep(500);
+            httpServletRequest.setAttribute("tranceId", UUID.randomUUID().toString());
             StringBuilder sb = new StringBuilder(1000);
             sb.append("\n"+"-----------------------").append(new Date()).append("-------------------------------------\n");
             HandlerMethod h = (HandlerMethod) handler;
@@ -46,11 +49,16 @@ public class LogIntercepter implements HandlerInterceptor{
 
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) throws Exception {
 
+        StringBuilder sb = new StringBuilder(1000);
+        String tranceId = (String) httpServletRequest.getAttribute("tranceId");
+        if(tranceId==null || "".equals(tranceId)){
+            httpServletRequest.setAttribute("tranceId",UUID.randomUUID().toString());
+        }
+        sb.append("tranceId : "+tranceId+"\n");
         long startTime = (Long) httpServletRequest.getAttribute("startTime");
         long endTime = System.currentTimeMillis();
         long executeTime = endTime - startTime;
         if(handler instanceof HandlerMethod){
-            StringBuilder sb = new StringBuilder(1000);
             sb.append("CostTime  : ").append(executeTime).append("ms").append("\n");
             System.out.print(sb.toString());
         }

@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>文章列表</title>
 	<%
-		pageContext.setAttribute("APP_PATH", request.getContextPath());
+		//		pageContext.setAttribute("APP_PATH", request.getContextPath());
 	%>
 	<script type="text/javascript"
 			src="${APP_PATH }/static/js/jquery-1.12.4.min.js"></script>
@@ -24,14 +24,15 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">员工修改</h4>
+				<h4 class="modal-title">文章修改</h4>
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal">
 					<div class="form-group">
 						<label class="col-sm-2 control-label">author</label>
 						<div class="col-sm-10">
-							<p class="form-control-static" id="author_update_static"></p>
+							<input type="text" name="title" class="form-control" id="author_update_static" placeholder="Hevery">
+							<span class="help-block"></span>
 						</div>
 					</div>
 					<div class="form-group">
@@ -137,7 +138,7 @@
 					<th>
 						<input type="checkbox" id="check_all"/>
 					</th>
-					<th>#</th>
+					<th>AritcleId</th>
 					<th>Author</th>
 					<th>Title</th>
 					<th>Content</th>
@@ -288,7 +289,6 @@
         var navEle = $("<nav></nav>").append(ul);
         navEle.appendTo("#page_nav_area");
     }
-
     //清空表单样式及内容
     function reset_form(ele){
         $(ele)[0].reset();
@@ -307,6 +307,7 @@
         });
     });
 
+
     //点击保存，保存文章。
     $("#art_save_btn").click(function(){
 
@@ -319,6 +320,7 @@
                 alert(result.code);
                 if(result.code == 100){
                     //文章保存成功；
+                    alert("保存成功");
                     //1、关闭模态框
                     $("#artAddModal").modal('hide');
                     //2、来到最后一页，显示刚才保存的数据,发送ajax请求显示最后一页数据即可
@@ -332,26 +334,26 @@
             }
         });
     });
-
     $(document).on("click",".edit_btn",function(){
         //查出文章信息并显示
-        getEmp($(this).attr("edit-id"));
-        //把员工的id传递给模态框的更新按钮
+        getArt($(this).attr("edit-id"));
+        //把文章的id传递给模态框的更新按钮
         $("#art_update_btn").attr("edit-id",$(this).attr("edit-id"));
         $("#artUpdateModal").modal({
             backdrop:"static"
         });
     });
-    function getEmp(id){
+    function getArt(id){
         $.ajax({
             url:"${APP_PATH}/art/"+id,
             type:"GET",
             success:function(result){
-                var artData = result.extend.emp;
-                $("#author_update_static").text(artData.author);
+                var artData = result.extend.art;
+                $("author_update_static").text(artData.author);
                 $("#title_update_input").text(artData.title);
                 $("#content_update_input").text(artData.content);
                 $("#pubTime_update_input").text(artData.pubTime);
+                alert(artData.content);
             }
         });
     }
@@ -377,7 +379,6 @@
         //1、弹出是否确认删除对话框
         var author = $(this).parents("tr").find("td:eq(2)").text();
         var articleId = $(this).attr("del-id");
-        //alert($(this).parents("tr").find("td:eq(1)").text());
         if(confirm("确认删除【"+author+"】吗？")){
             //确认，发送ajax请求删除即可
             $.ajax({
@@ -406,14 +407,13 @@
 
     //点击全部删除，就批量删除
     $("#art_delete_all_btn").click(function(){
-        //
         var authors = "";
         var del_idstr = "";
         $.each($(".check_item:checked"),function(){
             //this
             authors += $(this).parents("tr").find("td:eq(2)").text()+",";
             //组装文章id字符串
-            del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+            del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"*";
         });
         authors = authors.substring(0, authors.length-1);
         //去除删除的id多余的

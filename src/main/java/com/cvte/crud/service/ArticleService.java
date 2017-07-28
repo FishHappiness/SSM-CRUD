@@ -3,9 +3,11 @@ package com.cvte.crud.service;
 import com.cvte.crud.bean.Article;
 import com.cvte.crud.bean.ArticleExample;
 import com.cvte.crud.dao.ArticleMapper;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,7 +32,7 @@ public class ArticleService {
     }
 
     /**
-     * 按照员工id查询文章
+     * 按照文章id查询文章
      * @param id
      * @return
      */
@@ -55,9 +57,10 @@ public class ArticleService {
         articleMapper.deleteByPrimaryKey(id);
     }
     /**
-     * 文章批量删除是
+     * 文章批量删除
      * @param ids
      */
+
     public void deleteBatch(List<String> ids) {
 
         ArticleExample example = new ArticleExample();

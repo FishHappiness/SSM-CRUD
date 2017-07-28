@@ -2,17 +2,12 @@ package com.cvte.crud.controller;
 
 import com.cvte.crud.bean.Article;
 import com.cvte.crud.bean.Msg;
-import com.cvte.crud.dao.ArticleMapper;
 import com.cvte.crud.service.ArticleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +17,18 @@ public class ArticleController {
 
     @Autowired
     ArticleService articleService;
-
+    /**
+     * 删除文章，支持单个或批量删除
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value="/art/{ids}",method=RequestMethod.DELETE)
     public Msg deleteArticle(@PathVariable("ids")String ids){
         //批量删除
-        if(ids.contains("-")){
+        if(ids.contains("*")){
             List<String> del_ids = new ArrayList<String>();
-            String[] str_ids = ids.split("-");
+            String[] str_ids = ids.split("/*");
             //组装id的集合
             for (String string : str_ids) {
                 del_ids.add(string);
@@ -43,9 +42,7 @@ public class ArticleController {
 
     @ResponseBody
     @RequestMapping(value="/art/{articleId}",method=RequestMethod.PUT)
-    public Msg saveArticle(Article article, HttpServletRequest request){
-        System.out.println("请求体中的值："+request.getParameter("title"));
-        System.out.println("将要更新的文章数据："+article);
+    public Msg updateArticle(Article article){
         articleService.updateArticle(article);
         return Msg.success();
     }
@@ -68,9 +65,9 @@ public class ArticleController {
      */
     @RequestMapping(value="/art",method=RequestMethod.POST)
     @ResponseBody
-    public Msg saveAuthor(@Valid Article article, BindingResult result){
-            articleService.saveArticle(article);
-            return Msg.success();
+    public Msg saveArticle(Article article){
+        articleService.saveArticle(article);
+        return Msg.success();
     }
 
     /**
@@ -85,7 +82,6 @@ public class ArticleController {
         PageHelper.startPage(pn, 5);
         List<Article> arts = articleService.getAll();
         // 使用pageInfo包装查询后的结果，只需要将pageInfo即可。
-        // 封装了详细的分页信息,包括有我们查询出来的数据，传入连续显示的页数
         PageInfo page = new PageInfo(arts, 5);
         return Msg.success().add("pageInfo", page);
     }

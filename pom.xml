@@ -103,19 +103,6 @@
       <version>5.1.41</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.oracle/ojdbc14 -->
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.2.0.4.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/com.oracle/ojdbc14 -->
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.2.0.3.0</version>
-    </dependency>
-
     <!-- （jstl，servlet-api，junit） -->
     <!-- https://mvnrepository.com/artifact/jstl/jstl -->
     <dependency>
@@ -138,6 +125,17 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
+    </dependency>
+    <!--log4j-->
+    <!--<dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.9</version>
+    </dependency>-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.2</version>
     </dependency>
   </dependencies>
   <build>

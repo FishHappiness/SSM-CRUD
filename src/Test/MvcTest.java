@@ -1,5 +1,6 @@
+import java.util.List;
+
 import com.cvte.crud.bean.Article;
-import com.github.pagehelper.PageInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
+import com.github.pagehelper.PageInfo;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,10 +51,13 @@ public class MvcTest {
 		for (int i : nums) {
 			System.out.print(" "+i);
 		}
-		//获取文章数据
+		
+		//获取员工数据
 		List<Article> list = pi.getList();
 		for (Article article : list) {
 			System.out.println("ID："+article.getArticleId()+"==>Name:"+article.getPublicationTime());
 		}
+		
 	}
+
 }

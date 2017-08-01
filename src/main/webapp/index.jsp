@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>文章列表</title>
 	<%
-		//		pageContext.setAttribute("APP_PATH", request.getContextPath());
+		pageContext.setAttribute("APP_PATH", request.getContextPath());
 	%>
 	<script type="text/javascript"
 			src="${APP_PATH }/static/js/jquery-1.12.4.min.js"></script>
@@ -31,28 +31,28 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">author</label>
 						<div class="col-sm-10">
-							<input type="text" name="title" class="form-control" id="author_update_static" placeholder="Hevery">
-							<span class="help-block"></span>
+								<input type="text" name="title" class="form-control" id="author_update_static">
+								<span class="help-block"></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">title</label>
 						<div class="col-sm-10">
-							<input type="text" name="title" class="form-control" id="title_update_input" placeholder="谁的青春不迷茫">
+							<input type="text" name="title" class="form-control" id="title_update_input" >
 							<span class="help-block"></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">content</label>
 						<div class="col-sm-10">
-							<input type="text" name="content" class="form-control" id="content_update_input" placeholder="那年夏天.....">
+							<input type="text" name="content" class="form-control" id="content_update_input" >
 							<span class="help-block"></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">publication</label>
 						<div class="col-sm-10">
-							<input type="text" name="pubTime" class="form-control" id="pubTime_update_input" placeholder="2000-12-20">
+							<input type="text" name="pubTime" class="form-control" id="pubTime_update_input">
 							<span class="help-block"></span>
 						</div>
 					</div>
@@ -138,7 +138,7 @@
 					<th>
 						<input type="checkbox" id="check_all"/>
 					</th>
-					<th>AritcleId</th>
+					<th>#</th>
 					<th>Author</th>
 					<th>Title</th>
 					<th>Content</th>
@@ -160,11 +160,17 @@
 		<!-- 分页条信息 -->
 		<div class="col-md-6" id="page_nav_area"></div>
 	</div>
+	<!-- 测试RequestBody -->
+	<div class="row">
+		<div class="col-md-2 col-md-offset-10">
+			<button class="btn btn-primary" id="test">测试</button>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
 
-    var totalRecord,currentPage;
+    var totalRecord,currentPage,pubTime;
     //1、页面加载完成以后，直接去发送ajax请求,要到分页数据
     $(function(){
         //去首页
@@ -197,7 +203,7 @@
             var author = $("<td></td>").append(item.author);
             var title = $("<td></td>").append(item.title);
             var content = $("<td></td>").append(item.content);
-            var publicationTime = $("<td></td>").append(new Date(item.publicationTime).toLocaleString());
+            var publicationTime = $("<td></td>").append((new Date(item.publicationTime)).toLocaleDateString() + " " + (new Date(item.publicationTime)).toLocaleTimeString());
             var editBtn = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn")
                 .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
             //为编辑按钮添加一个自定义的属性，来表示当前文章id
@@ -250,8 +256,6 @@
             });
         }
 
-
-
         var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
         var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href","#"));
         if(result.extend.pageInfo.hasNextPage == false){
@@ -289,6 +293,7 @@
         var navEle = $("<nav></nav>").append(ul);
         navEle.appendTo("#page_nav_area");
     }
+
     //清空表单样式及内容
     function reset_form(ele){
         $(ele)[0].reset();
@@ -307,7 +312,6 @@
         });
     });
 
-
     //点击保存，保存文章。
     $("#art_save_btn").click(function(){
 
@@ -320,24 +324,19 @@
                 alert(result.code);
                 if(result.code == 100){
                     //文章保存成功；
-                    alert("保存成功");
                     //1、关闭模态框
                     $("#artAddModal").modal('hide');
                     //2、来到最后一页，显示刚才保存的数据,发送ajax请求显示最后一页数据即可
                     to_page(totalRecord);
-                }else{
-                    if(undefined != result.extend.errorFields.empName){
-                        //显示名字的错误信息
-                        show_validate_msg("#author_add_input", "error", result.extend.errorFields.author);
-                    }
                 }
             }
         });
     });
+
     $(document).on("click",".edit_btn",function(){
         //查出文章信息并显示
         getArt($(this).attr("edit-id"));
-        //把文章的id传递给模态框的更新按钮
+        //把员工的id传递给模态框的更新按钮
         $("#art_update_btn").attr("edit-id",$(this).attr("edit-id"));
         $("#artUpdateModal").modal({
             backdrop:"static"
@@ -349,11 +348,12 @@
             type:"GET",
             success:function(result){
                 var artData = result.extend.art;
-                $("author_update_static").text(artData.author);
-                $("#title_update_input").text(artData.title);
-                $("#content_update_input").text(artData.content);
-                $("#pubTime_update_input").text(artData.pubTime);
-               // alert(artData.content);
+                var pubTime = new Date(artData.publicationTime).toLocaleDateString() + " " + new Date(artData.publicationTime).toLocaleTimeString();
+                $("#author_update_static").val(artData.author);
+                $("#title_update_input").val(artData.title);
+                $("#content_update_input").val(artData.content);
+                $("#pubTime_update_input").val(pubTime)
+                //$("#pubTime_update_input").val(artData.publicationTime);
             }
         });
     }
@@ -377,9 +377,9 @@
     //单个删除
     $(document).on("click",".delete_btn",function(){
         //1、弹出是否确认删除对话框
-        var author = $(this).parents("tr").find("td:eq(2)").text();
+        var title = $(this).parents("tr").find("td:eq(3)").text();
         var articleId = $(this).attr("del-id");
-        if(confirm("确认删除【"+author+"】吗？")){
+        if(confirm("确认删除【"+title+"】吗？")){
             //确认，发送ajax请求删除即可
             $.ajax({
                 url:"${APP_PATH}/art/"+articleId,
@@ -407,13 +407,14 @@
 
     //点击全部删除，就批量删除
     $("#art_delete_all_btn").click(function(){
+        //
         var authors = "";
         var del_idstr = "";
         $.each($(".check_item:checked"),function(){
             //this
             authors += $(this).parents("tr").find("td:eq(2)").text()+",";
             //组装文章id字符串
-            del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"*";
+            del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
         });
         authors = authors.substring(0, authors.length-1);
         //去除删除的id多余的
@@ -430,6 +431,25 @@
                 }
             });
         }
+    });
+
+    $("#test").click(function(){
+      // alert(test)
+        var saveDataAry=[];
+        var data1={"articleId":12345,"author":"test","title":"gz"};
+        var data2={"articleId":12225,"author":"ququ","title":"gr"};
+        saveDataAry.push(data1);
+        saveDataAry.push(data2);
+        $.ajax({
+            url:"saveArt",
+            type:"POST",
+            dataType:"json",
+            contentType:"application/json",
+            data:JSON.stringify(saveDataAry),
+            success:function(data){
+                alert("success");
+            }
+        });
     });
 </script>
 </body>

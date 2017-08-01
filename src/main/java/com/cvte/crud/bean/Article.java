@@ -3,7 +3,7 @@ package com.cvte.crud.bean;
 import java.util.Date;
 
 public class Article {
-    private String articleId;
+    private Integer articleId;
 
     private String author;
 
@@ -11,12 +11,10 @@ public class Article {
 
     private String content;
 
-    private Date publicationTime;
-
     public Article() {
     }
 
-    public Article(String articleId, String author, String title, String content, Date publicationTime) {
+    public Article(Integer articleId, String author, String title, String content, Date publicationTime) {
         this.articleId = articleId;
         this.author = author;
         this.title = title;
@@ -24,12 +22,14 @@ public class Article {
         this.publicationTime = publicationTime;
     }
 
-    public String getArticleId() {
+    private Date publicationTime;
+
+    public Integer getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(String articleId) {
-        this.articleId = articleId == null ? null : articleId.trim();
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
     }
 
     public String getAuthor() {

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ServletOutputStreamCopier extends ServletOutputStream {
-    protected OutputStream outputStream;
+    private OutputStream outputStream;
     private ByteArrayOutputStream copy;
 
     public ServletOutputStreamCopier(OutputStream outputStream) {

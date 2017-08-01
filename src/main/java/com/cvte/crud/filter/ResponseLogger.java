@@ -1,7 +1,10 @@
-package com.cvte.crud.filter;
 
+package com.cvte.crud.Filter;
 
+import com.cvte.crud.bean.LogEntity;
+import com.cvte.crud.kafka.util.KafkaProducer;
 import com.cvte.crud.warpper.HttpServletResponseCopier;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +16,7 @@ public class ResponseLogger implements Filter{
     protected ServletRequest request;
     private ServletResponse response;
     private FilterChain chain;
-
+    private KafkaProducer kafkaProducer= new KafkaProducer();
     public void init(FilterConfig config) throws ServletException {
     }
 
@@ -24,6 +27,7 @@ public class ResponseLogger implements Filter{
         if (response.getCharacterEncoding() == null) {
             response.setCharacterEncoding("UTF-8");
         }
+
         HttpServletResponseCopier responseCopier = null;
         try {
             responseCopier = new HttpServletResponseCopier((HttpServletResponse) response);
@@ -33,13 +37,21 @@ public class ResponseLogger implements Filter{
             LOGGER.error(e.getMessage());
         }finally {
             byte[] copy = responseCopier.getCopy();
+            LogEntity log = null;
+            ObjectMapper objectMapper = new ObjectMapper();
+            String JSON = null;
             try {
-                System.out.println("return :"+new String(copy, response.getCharacterEncoding()));
-                LOGGER.info("return :"+new String(copy, response.getCharacterEncoding()));
+                if( request.getAttribute("log") != null) {
+                    log = (LogEntity) request.getAttribute("log");
+                    log.setResult(new String(copy, response.getCharacterEncoding()));
+                }
+                JSON = objectMapper.writeValueAsString(log);
+                System.out.println(JSON);
+                LOGGER.info(JSON);
+                kafkaProducer.produce(JSON);
             }catch (Exception e){
                 LOGGER.error(e.getMessage());
             }
-
         }
     }
     public void destroy() {

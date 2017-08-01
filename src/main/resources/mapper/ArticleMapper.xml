@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cvte.crud.dao.ArticleMapper">
   <resultMap id="BaseResultMap" type="com.cvte.crud.bean.Article">
-    <id column="article_Id" jdbcType="VARCHAR" property="articleId" />
+    <id column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="publication_Time" jdbcType="TIMESTAMP" property="publicationTime" />
+    <result column="publication_time" jdbcType="TIMESTAMP" property="publicationTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    article_Id, author, title, content, publication_Time
+    article_id, author, title, content, publication_time
   </sql>
   <select id="selectByExample" parameterType="com.cvte.crud.bean.ArticleExample" resultMap="BaseResultMap">
     select
@@ -75,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from z_curd
+    from zhy_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -83,33 +83,33 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from z_curd
-    where article_Id = #{articleId,jdbcType=VARCHAR}
+    from zhy_article
+    where article_id = #{articleId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from z_curd
-    where article_Id = #{articleId,jdbcType=VARCHAR}
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zhy_article
+    where article_id = #{articleId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.cvte.crud.bean.ArticleExample">
-    delete from z_curd
+    delete from zhy_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.cvte.crud.bean.Article">
-    insert into z_curd (article_Id, author, title, 
-      content, publication_Time)
-    values (#{articleId,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+    insert into zhy_article (article_id, author, title, 
+      content, publication_time)
+    values (#{articleId,jdbcType=INTEGER}, #{author,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{content,jdbcType=VARCHAR}, #{publicationTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.cvte.crud.bean.Article">
-    insert into z_curd
+    insert into zhy_article
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="articleId != null">
-        article_Id,
+        article_id,
       </if>
       <if test="author != null">
         author,
@@ -121,12 +121,12 @@
         content,
       </if>
       <if test="publicationTime != null">
-        publication_Time,
+        publication_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="articleId != null">
-        #{articleId,jdbcType=VARCHAR},
+        #{articleId,jdbcType=INTEGER},
       </if>
       <if test="author != null">
         #{author,jdbcType=VARCHAR},
@@ -143,16 +143,16 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.cvte.crud.bean.ArticleExample" resultType="java.lang.Long">
-    select count(*) from z_curd
+    select count(*) from zhy_article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update z_curd
+    update zhy_article
     <set>
       <if test="record.articleId != null">
-        article_Id = #{record.articleId,jdbcType=VARCHAR},
+        article_id = #{record.articleId,jdbcType=INTEGER},
       </if>
       <if test="record.author != null">
         author = #{record.author,jdbcType=VARCHAR},
@@ -164,7 +164,7 @@
         content = #{record.content,jdbcType=VARCHAR},
       </if>
       <if test="record.publicationTime != null">
-        publication_Time = #{record.publicationTime,jdbcType=TIMESTAMP},
+        publication_time = #{record.publicationTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -172,18 +172,18 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update z_curd
-    set article_Id = #{record.articleId,jdbcType=VARCHAR},
+    update zhy_article
+    set article_id = #{record.articleId,jdbcType=INTEGER},
       author = #{record.author,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
-      publication_Time = #{record.publicationTime,jdbcType=TIMESTAMP}
+      publication_time = #{record.publicationTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.cvte.crud.bean.Article">
-    update z_curd
+    update zhy_article
     <set>
       <if test="author != null">
         author = #{author,jdbcType=VARCHAR},
@@ -195,17 +195,17 @@
         content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="publicationTime != null">
-        publication_Time = #{publicationTime,jdbcType=TIMESTAMP},
+        publication_time = #{publicationTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where article_Id = #{articleId,jdbcType=VARCHAR}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cvte.crud.bean.Article">
-    update z_curd
+    update zhy_article
     set author = #{author,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
-      publication_Time = #{publicationTime,jdbcType=TIMESTAMP}
-    where article_Id = #{articleId,jdbcType=VARCHAR}
+      publication_time = #{publicationTime,jdbcType=TIMESTAMP}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>

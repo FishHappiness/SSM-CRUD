@@ -3,11 +3,9 @@ package com.cvte.crud.service;
 import com.cvte.crud.bean.Article;
 import com.cvte.crud.bean.ArticleExample;
 import com.cvte.crud.dao.ArticleMapper;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,11 +30,25 @@ public class ArticleService {
     }
 
     /**
-     * 按照文章id查询文章
+     * 检验用户名是否可用
+     *
+     * @param author
+     * @return  true：代表当前姓名可用   fasle：不可用
+     */
+    public boolean checkAuthor(String author) {
+        ArticleExample example = new ArticleExample();
+        ArticleExample.Criteria criteria = example.createCriteria();
+        criteria.andAuthorEqualTo(author);
+        long count = articleMapper.countByExample(example);
+        return count == 0;
+    }
+
+    /**
+     * 按照员工id查询文章
      * @param id
      * @return
      */
-    public  Article getArticle(String id) {
+    public  Article getArticle(Integer id) {
         Article article = articleMapper.selectByPrimaryKey(id);
         return article;
     }
@@ -53,18 +65,15 @@ public class ArticleService {
      * 文章删除
      * @param id
      */
-    public void deleteArticle(String id) {
+    public void deleteArticle(Integer id) {
         articleMapper.deleteByPrimaryKey(id);
     }
-    /**
-     * 文章批量删除
-     * @param ids
-     */
 
-    public void deleteBatch(List<String> ids) {
+    public void deleteBatch(List<Integer> ids) {
 
         ArticleExample example = new ArticleExample();
         ArticleExample.Criteria criteria = example.createCriteria();
+        //delete from xxx where emp_id in(1,2,3)
         criteria.andArticleIdIn(ids);
         articleMapper.deleteByExample(example);
     }

@@ -4,14 +4,13 @@ import com.cvte.crud.bean.Article;
 import com.cvte.crud.bean.ArticleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public interface ArticleMapper {
     long countByExample(ArticleExample example);
 
     int deleteByExample(ArticleExample example);
 
-    int deleteByPrimaryKey(String articleId);
+    int deleteByPrimaryKey(Integer articleId);
 
     int insert(Article record);
 
@@ -19,7 +18,7 @@ public interface ArticleMapper {
 
     List<Article> selectByExample(ArticleExample example);
 
-    Article selectByPrimaryKey(String articleId);
+    Article selectByPrimaryKey(Integer articleId);
 
     int updateByExampleSelective(@Param("record") Article record, @Param("example") ArticleExample example);
 
@@ -28,5 +27,4 @@ public interface ArticleMapper {
     int updateByPrimaryKeySelective(Article record);
 
     int updateByPrimaryKey(Article record);
-
 }

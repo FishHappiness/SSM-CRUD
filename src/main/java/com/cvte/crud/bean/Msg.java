@@ -26,7 +26,7 @@ public class Msg {
 		return result;
 	}
 	
-	public Msg add(String key, Object value){
+	public Msg add(String key,Object value){
 		this.getExtend().put(key, value);
 		return this;
 	}

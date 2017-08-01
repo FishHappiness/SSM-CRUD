@@ -19,28 +19,23 @@ public class HttpServletResponseCopier extends HttpServletResponseWrapper {
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
         if (writer != null) {
-            throw new IllegalStateException("getWriter() has already been called on this response.");
+            throw new IllegalStateException("getWriter() has already been called");
         }
-
         if (outputStream == null) {
             outputStream = getResponse().getOutputStream();
             copier = new ServletOutputStreamCopier(outputStream);
         }
-
         return copier;
     }
-
     @Override
     public PrintWriter getWriter() throws IOException {
         if (outputStream != null) {
-            throw new IllegalStateException("getOutputStream() has already been called on this response.");
+            throw new IllegalStateException("getOutputStream() has been called");
         }
-
         if (writer == null) {
             copier = new ServletOutputStreamCopier(getResponse().getOutputStream());
             writer = new PrintWriter(new OutputStreamWriter(copier, getResponse().getCharacterEncoding()), true);
         }
-
         return writer;
     }
 
@@ -60,5 +55,4 @@ public class HttpServletResponseCopier extends HttpServletResponseWrapper {
             return new byte[0];
         }
     }
-
 }

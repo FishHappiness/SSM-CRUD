@@ -51,8 +51,6 @@ public class MvcTest {
 		for (int i : nums) {
 			System.out.print(" "+i);
 		}
-		
-		//获取员工数据
 		List<Article> list = pi.getList();
 		for (Article article : list) {
 			System.out.println("ID："+article.getArticleId()+"==>Name:"+article.getPublicationTime());

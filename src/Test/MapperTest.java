@@ -25,18 +25,5 @@ public class MapperTest {
 	SqlSession sqlSession;
 	@Test
 	public void testCRUD(){
-		//System.out.println(departmentMapper);
-		System.out.println(articleMapper);
-		ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
-		/*for(int i = 0;i<1000;i++){
-			String uid = UUID.randomUUID().toString().substring(0,5)+i;
-			mapper.insertSelective(new Article(null,uid,"12323","fdfdf",null));
-		}
-		System.out.println("批量完成");*/
-		//mapper.deleteByPrimaryKey(3);
-	//	mapper.updateByPrimaryKey(new Article(9,"ccccc" ,"ddddd","hahahhah",null));
-		//System.out.println(mapper.selectByExample());
-		System.out.println("删除");
-		mapper.selectByPrimaryKey(123);
 	}
 }

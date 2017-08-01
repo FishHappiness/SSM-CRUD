@@ -30,21 +30,7 @@ public class ArticleService {
     }
 
     /**
-     * 检验用户名是否可用
-     *
-     * @param author
-     * @return  true：代表当前姓名可用   fasle：不可用
-     */
-    public boolean checkAuthor(String author) {
-        ArticleExample example = new ArticleExample();
-        ArticleExample.Criteria criteria = example.createCriteria();
-        criteria.andAuthorEqualTo(author);
-        long count = articleMapper.countByExample(example);
-        return count == 0;
-    }
-
-    /**
-     * 按照员工id查询文章
+     * 按照文章id查询文章
      * @param id
      * @return
      */

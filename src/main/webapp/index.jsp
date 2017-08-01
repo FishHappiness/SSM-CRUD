@@ -183,7 +183,7 @@
             data:"pn="+pn,
             type:"GET",
             success:function(result){
-                //1、解析并显示员工数据
+                //1、解析并显示文章数据
                 build_arts_table(result);
                 //2、解析并显示分页信息
                 build_page_info(result);
@@ -336,7 +336,7 @@
     $(document).on("click",".edit_btn",function(){
         //查出文章信息并显示
         getArt($(this).attr("edit-id"));
-        //把员工的id传递给模态框的更新按钮
+        //把文章的id传递给模态框的更新按钮
         $("#art_update_btn").attr("edit-id",$(this).attr("edit-id"));
         $("#artUpdateModal").modal({
             backdrop:"static"
